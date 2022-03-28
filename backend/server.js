@@ -28,7 +28,11 @@ try {
     });
     jsonData = JSON.parse(data);
 } catch (error) {
-    console.log(error);
+    fs.writeFile(`${dataLocation}data.json`, JSON.stringify(jsonData), (error) => {
+        if (error) {
+            console.log(error);
+        }
+    });
 }
 
 const uploads = path.join(`${__dirname}/../frontend/upload/`);
@@ -38,7 +42,9 @@ app.post("/", (req, res) => {
     const picture = req.files.picture;
     if (picture) {
         console.dir(picture);
-        picture.mv(uploads + "profile.jpg");
+        picture.mv(uploads + "profile.jpg", error => {
+            return res.status(500).send(error);
+        });
     }
 
     // Upload data from form
@@ -51,6 +57,7 @@ app.post("/", (req, res) => {
             console.log(error);
         }
     });
+    res.send("Done");
 });
 
 const port = 9000;
