@@ -25,9 +25,11 @@ function loadEvent() {
         };
 
         fetch("/", fetchSettings)
-            .then(data => {
+            .then(async data => {
                 if (data.status === 200) {
-                    e.target.outerHTML = "Done";
+                    const res = await data.json();
+
+                    e.target.outerHTML = `<img src="upload/${res.pictureName}">`
                     console.dir(data);
                 } 
             })

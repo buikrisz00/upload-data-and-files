@@ -40,12 +40,14 @@ const uploads = path.join(`${__dirname}/../frontend/upload/`);
 app.post("/", (req, res) => {
     // Upload image
     const picture = req.files.picture;
+    const answer = {};
+
     if (picture) {
-        console.dir(picture);
-        picture.mv(uploads + "profile.jpg", error => {
+        picture.mv(uploads + picture.name, error => {
             return res.status(500).send(error);
         });
     }
+    answer.pictureName = picture.name;
 
     // Upload data from form
     const formData = req.body;
@@ -57,7 +59,7 @@ app.post("/", (req, res) => {
             console.log(error);
         }
     });
-    res.send("Done");
+    res.send(answer);
 });
 
 const port = 9000;
